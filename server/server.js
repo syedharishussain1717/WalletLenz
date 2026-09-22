@@ -1,3 +1,4 @@
+const authMiddleware = require("./middleware/authMiddleware");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -18,6 +19,13 @@ app.get("/api/test", (req, res) => {
     res.json({
         message: "WalletLenz API is working!"
     });
+});
+
+app.get("/api/protected", authMiddleware, (req, res) => {
+  res.status(200).json({
+    message: "You have access to this protected route",
+    user: req.user,
+  });
 });
 
 mongoose
