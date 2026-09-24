@@ -5,10 +5,18 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 require("dotenv").config();
 const expenseRoutes = require("./routes/expense");
+
 const app = express();
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
+
 app.use("/api/expenses", expenseRoutes);
-app.use(cors());
 
 app.use("/api/auth", authRoutes);
 
@@ -23,10 +31,10 @@ app.get("/api/test", (req, res) => {
 });
 
 app.get("/api/protected", authMiddleware, (req, res) => {
-  res.status(200).json({
-    message: "You have access to this protected route",
-    user: req.user,
-  });
+    res.status(200).json({
+        message: "You have access to this protected route",
+        user: req.user,
+    });
 });
 
 mongoose
