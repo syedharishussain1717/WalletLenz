@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
+
+// importing components
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseCard from "./components/ExpenseCard";
+import Dashboard from "./components/Dashboard";
+
 import { API_URL } from "./config";
 import Login from "./pages/Login";
+
 function App() {
     const [expenses, setExpenses] = useState([]);
 
@@ -180,6 +185,8 @@ function App() {
                             <button onClick={logout}>
                                 Logout
                             </button>
+
+                            <Dashboard expenses={expenses} />
 
                             <h2>My Expenses</h2>
 

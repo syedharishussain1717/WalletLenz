@@ -1,111 +1,335 @@
+/*CSS STYLE FOR DASHBOARD*/
+
+/* ===== 1. FONT ===== */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ===== 2. VARIABLES (colors, spacing, radius) ===== */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --primary: #0f766e;        /* deep teal */
+  --primary-dark: #115e59;
+  --bg: #f1f5f9;             /* soft grey-blue page background */
+  --card-bg: #ffffff;
+  --text: #0f172a;           /* main text */
+  --text-muted: #64748b;     /* secondary text */
+  --border: #e2e8f0;
+  --expense: #dc2626;        /* red for expenses */
+  --income: #16a34a;         /* green for income */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --radius: 12px;
+  --shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-hover: 0 6px 16px rgba(15, 23, 42, 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* ===== 3. BASE STYLES ===== */
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+/* ===== 4. PAGE LAYOUT ===== */
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;                 /* centers the page on big screens */
+  padding: var(--space-md);       /* small padding on mobile */
+}
+
+.dashboard-title {
+  margin: 0 0 var(--space-md);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Grid: 1 column on mobile (default) */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+/* ===== 5. CARDS ===== */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.card h3 {
+  margin: 0 0 var(--space-md);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* ===== 6. TOTAL EXPENSES CARD ===== */
+.total-card {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.total-card h3 {
+  color: #ccfbf1;                 /* light teal label */
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.total-amount {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* ===== 7. LISTS (recent transactions + category summary) ===== */
+.list-item {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.list-item:last-child {
+  border-bottom: none;            /* no line after the last row */
+}
+
+.item-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.item-date {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.item-amount {
+  margin: 0;
+  font-weight: 600;
+  color: var(--expense);
+  white-space: nowrap;            /* keeps "Rs. 1500" on one line */
+}
+
+.empty-text {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+/* ===== 8. CHART ===== */
+.chart-box {
+  width: 100%;
+  height: 300px;                  /* ResponsiveContainer needs a height */
+}
+
+/* ===== 9. FOCUS STYLE (keyboard users) ===== */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ===== 10. RESPONSIVE (mobile-first) ===== */
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .dashboard {
+    padding: var(--space-lg);
+  }
+
+  .dashboard-title {
+    font-size: 1.75rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;   /* 2 columns */
+    gap: var(--space-lg);
+  }
+
+  /* these cards stretch across both columns */
+  .total-card,
+  .chart-card {
+    grid-column: 1 / -1;
+  }
+
+  .total-amount {
+    font-size: 2.5rem;
+  }
+
+  .chart-box {
+    height: 360px;
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+  .dashboard {
+    padding: 32px;
+  }
+}
+
+
+/*Login page CSS*/
+/* ===== 1. FONT ===== */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ===== 2. VARIABLES (same theme as the dashboard) ===== */
+:root {
+  --primary: #0f766e;
+  --primary-dark: #115e59;
+  --bg: #f1f5f9;
+  --card-bg: #ffffff;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --border: #cbd5e1;
+  --radius: 12px;
+  --shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+}
+
+/* ===== 3. BASE STYLES ===== */
+* {
   box-sizing: border-box;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
+body {
   margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+/* ===== 4. PAGE LAYOUT: centers the card on the screen ===== */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;                   /* keeps the card off the screen edges on small phones */
+  background: var(--bg);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* ===== 5. LOGIN CARD ===== */
+.login-card {
+  width: 100%;                     /* full width on mobile... */
+  max-width: 400px;                /* ...but never wider than 400px */
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.login-brand {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.login-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.login-subtitle {
+  margin: 4px 0 24px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* ===== 6. FORM ===== */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;                 /* 16px stops iPhones from zooming in on focus */
+  font-family: inherit;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input::placeholder {
+  color: #94a3b8;
+}
+
+/* Focus state: teal border + soft glow */
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2);
+}
+
+/* ===== 7. BUTTON ===== */
+.login-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #ffffff;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login-button:hover {
+  background: var(--primary-dark);
+}
+
+.login-button:focus-visible {
+  outline: 3px solid rgba(15, 118, 110, 0.4);
+  outline-offset: 2px;
+}
+
+/* ===== 8. RESPONSIVE (mobile-first) ===== */
+
+/* Tablet and up: more breathing room inside the card */
+@media (min-width: 768px) {
+  .login-card {
+    padding: 40px;
+    max-width: 420px;
+  }
+
+  .login-title {
+    font-size: 1.75rem;
+  }
 }
