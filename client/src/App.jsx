@@ -133,6 +133,9 @@ function App() {
     useEffect(() => {
         const getExpenses = async () => {
             const token = localStorage.getItem("token");
+            if (!token) {
+                return;
+            }
 
             try {
                 const response = await fetch(`${API_URL}/api/expenses`, {
@@ -157,6 +160,12 @@ function App() {
         getExpenses();
     }, []);
 
+    const logout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+    };
+
+
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
@@ -164,39 +173,48 @@ function App() {
             <Route
                 path="/"
                 element={
-                    <div>
-                        <h1>WalletLenz</h1>
-                        <h2>My Expenses</h2>
+                    localStorage.getItem("token") ? (
+                        <div>
+                            <h1>WalletLenz</h1>
 
-                        <ExpenseForm
-                            amount={amount}
-                            setAmount={setAmount}
-                            category={category}
-                            setCategory={setCategory}
-                            date={date}
-                            setDate={setDate}
-                            description={description}
-                            setDescription={setDescription}
-                            editingId={editingId}
-                            addExpense={addExpense}
-                            updateExpense={updateExpense}
-                        />
+                            <button onClick={logout}>
+                                Logout
+                            </button>
 
-                        {expenses.length === 0 ? (
-                            <p>No expenses found.</p>
-                        ) : (
-                            <div>
-                                {expenses.map((expense) => (
-                                    <ExpenseCard
-                                        key={expense._id}
-                                        expense={expense}
-                                        startEdit={startEdit}
-                                        deleteExpense={deleteExpense}
-                                    />
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                            <h2>My Expenses</h2>
+
+                            <ExpenseForm
+                                amount={amount}
+                                setAmount={setAmount}
+                                category={category}
+                                setCategory={setCategory}
+                                date={date}
+                                setDate={setDate}
+                                description={description}
+                                setDescription={setDescription}
+                                editingId={editingId}
+                                addExpense={addExpense}
+                                updateExpense={updateExpense}
+                            />
+
+                            {expenses.length === 0 ? (
+                                <p>No expenses found.</p>
+                            ) : (
+                                <div>
+                                    {expenses.map((expense) => (
+                                        <ExpenseCard
+                                            key={expense._id}
+                                            expense={expense}
+                                            startEdit={startEdit}
+                                            deleteExpense={deleteExpense}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <Login />
+                    )
                 }
             />
         </Routes>

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -30,6 +32,8 @@ function Login() {
       localStorage.setItem("token", data.token);
 
       alert("Login successful!");
+
+      window.location.href = "/";
 
       console.log("JWT Token:", data.token);
     } catch (error) {
