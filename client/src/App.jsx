@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseCard from "./components/ExpenseCard";
 import { API_URL } from "./config";
+import Login from "./pages/Login";
 function App() {
     const [expenses, setExpenses] = useState([]);
 
@@ -156,39 +158,48 @@ function App() {
     }, []);
 
     return (
-        <div>
-            <h1>WalletLenz</h1>
-            <h2>My Expenses</h2>
+        <Routes>
+            <Route path="/login" element={<Login />} />
 
-            <ExpenseForm
-                amount={amount}
-                setAmount={setAmount}
-                category={category}
-                setCategory={setCategory}
-                date={date}
-                setDate={setDate}
-                description={description}
-                setDescription={setDescription}
-                editingId={editingId}
-                addExpense={addExpense}
-                updateExpense={updateExpense}
-            />
+            <Route
+                path="/"
+                element={
+                    <div>
+                        <h1>WalletLenz</h1>
+                        <h2>My Expenses</h2>
 
-            {expenses.length === 0 ? (
-                <p>No expenses found.</p>
-            ) : (
-                <div>
-                    {expenses.map((expense) => (
-                        <ExpenseCard
-                            key={expense._id}
-                            expense={expense}
-                            startEdit={startEdit}
-                            deleteExpense={deleteExpense}
+                        <ExpenseForm
+                            amount={amount}
+                            setAmount={setAmount}
+                            category={category}
+                            setCategory={setCategory}
+                            date={date}
+                            setDate={setDate}
+                            description={description}
+                            setDescription={setDescription}
+                            editingId={editingId}
+                            addExpense={addExpense}
+                            updateExpense={updateExpense}
                         />
-                    ))}
-                </div>
-            )}
-        </div>
+
+                        {expenses.length === 0 ? (
+                            <p>No expenses found.</p>
+                        ) : (
+                            <div>
+                                {expenses.map((expense) => (
+                                    <ExpenseCard
+                                        key={expense._id}
+                                        expense={expense}
+                                        startEdit={startEdit}
+                                        deleteExpense={deleteExpense}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                }
+            />
+        </Routes>
     );
 }
 
