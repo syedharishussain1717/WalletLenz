@@ -6,10 +6,11 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
 import ExpenseForm from "./components/ExpenseForm";
-import ExpenseCard from "./components/ExpenseCard";
+
 
 // Pages
 import Login from "./pages/Login";
+import ViewExpenses from "./pages/ViewExpenses";
 
 import { API_URL } from "./config";
 
@@ -266,20 +267,11 @@ function App() {
                     path="/expenses"
                     element={
                         isLoggedIn ? (
-                            <div>
-                                {expenses.length === 0 ? (
-                                    <p>No expenses found.</p>
-                                ) : (
-                                    expenses.map((expense) => (
-                                        <ExpenseCard
-                                            key={expense._id}
-                                            expense={expense}
-                                            startEdit={startEdit}
-                                            deleteExpense={deleteExpense}
-                                        />
-                                    ))
-                                )}
-                            </div>
+                            <ViewExpenses
+                                expenses={expenses}
+                                startEdit={startEdit}
+                                deleteExpense={deleteExpense}
+                            />
                         ) : (
                             <Navigate to="/login" />
                         )
