@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-
-// importing components
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "./App.css";
+// Components
+import Navbar from "./components/Navbar";
+import Dashboard from "./components/Dashboard";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseCard from "./components/ExpenseCard";
-import Dashboard from "./components/Dashboard";
 
-import { API_URL } from "./config";
+// Pages
 import Login from "./pages/Login";
 
+import { API_URL } from "./config";
+
 function App() {
+    const navigate = useNavigate();
     const [expenses, setExpenses] = useState([]);
 
     const [amount, setAmount] = useState("");
@@ -17,6 +22,83 @@ function App() {
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
     const [editingId, setEditingId] = useState(null);
+
+    // -------------------------
+    // GET EXPENSES
+    // -------------------------
+    useEffect(() => {
+        const getExpenses = async () => {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `${API_URL}/api/expenses`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    setExpenses(data);
+                }
+            } catch (error) {
+                console.error("Error fetching expenses:", error);
+            }
+        };
+
+        getExpenses();
+    }, []);
+
+    // -------------------------
+    // ADD EXPENSE
+    // -------------------------
+    const addExpense = async (e) => {
+        e.preventDefault();
+
+        const token = localStorage.getItem("token");
+
+        try {
+            const response = await fetch(
+                `${API_URL}/api/expenses`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        amount,
+                        category,
+                        date,
+                        description,
+                    }),
+                }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setExpenses([...expenses, data.expense]);
+
+                clearForm();
+            }
+        } catch (error) {
+            console.error("Error adding expense:", error);
+        }
+    };
+
+    // -------------------------
+    // DELETE EXPENSE
+    // -------------------------
     const deleteExpense = async (id) => {
         const token = localStorage.getItem("token");
 
@@ -31,13 +113,11 @@ function App() {
                 }
             );
 
-            const data = await response.json();
-
-            console.log("Delete response:", data);
-
             if (response.ok) {
                 setExpenses(
-                    expenses.filter((expense) => expense._id !== id)
+                    expenses.filter(
+                        (expense) => expense._id !== id
+                    )
                 );
             }
         } catch (error) {
@@ -45,51 +125,24 @@ function App() {
         }
     };
 
+    // -------------------------
+    // START EDIT
+    // -------------------------
     const startEdit = (expense) => {
+
         setEditingId(expense._id);
         setAmount(expense.amount);
         setCategory(expense.category);
-        setDate(expense.date.split("T")[0]);
         setDescription(expense.description);
+        setDate(expense.date.split("T")[0]);
+
+        navigate("/add-expense");
+
     };
 
-    const addExpense = async (e) => {
-        e.preventDefault();
-
-        const token = localStorage.getItem("token");
-
-        try {
-            const response = await fetch(`${API_URL}/api/expenses`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    amount,
-                    category,
-                    date,
-                    description,
-                }),
-            });
-
-            const data = await response.json();
-
-            console.log("Add expense response:", data);
-
-            if (response.ok) {
-                setExpenses([...expenses, data.expense]);
-
-                setAmount("");
-                setCategory("");
-                setDescription("");
-                setDate("");
-            }
-        } catch (error) {
-            console.error("Error adding expense:", error);
-        }
-    };
-
+    // -------------------------
+    // UPDATE EXPENSE
+    // -------------------------
     const updateExpense = async (e) => {
         e.preventDefault();
 
@@ -115,81 +168,80 @@ function App() {
 
             const data = await response.json();
 
-            console.log("Update expense response:", data);
-
             if (response.ok) {
                 setExpenses(
                     expenses.map((expense) =>
-                        expense._id === editingId ? data.expense : expense
+                        expense._id === editingId
+                            ? data.expense
+                            : expense
                     )
                 );
 
+                clearForm();
                 setEditingId(null);
-                setAmount("");
-                setCategory("");
-                setDate("");
-                setDescription("");
             }
         } catch (error) {
             console.error("Error updating expense:", error);
         }
     };
 
-    useEffect(() => {
-        const getExpenses = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                return;
-            }
+    // -------------------------
+    // CLEAR FORM
+    // -------------------------
+    const clearForm = () => {
+        setAmount("");
+        setCategory("");
+        setDescription("");
+        setDate("");
+    };
 
-            try {
-                const response = await fetch(`${API_URL}/api/expenses`, {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                const data = await response.json();
-
-                console.log("Expenses response:", data);
-
-                if (response.ok) {
-                    setExpenses(data);
-                }
-            } catch (error) {
-                console.error("Error fetching expenses:", error);
-            }
-        };
-
-        getExpenses();
-    }, []);
-
+    // -------------------------
+    // LOGOUT
+    // -------------------------
     const logout = () => {
         localStorage.removeItem("token");
         window.location.href = "/login";
     };
 
+    // -------------------------
+    // PROTECTED PAGE
+    // -------------------------
+    const isLoggedIn = !!localStorage.getItem("token");
 
     return (
-        <Routes>
-            <Route path="/login" element={<Login />} />
+        <>
+            {isLoggedIn && <Navbar logout={logout} />}
 
-            <Route
-                path="/"
-                element={
-                    localStorage.getItem("token") ? (
-                        <div>
-                            <h1>WalletLenz</h1>
+            <Routes>
+                {/* Login */}
+                <Route
+                    path="/login"
+                    element={
+                        isLoggedIn ? (
+                            <Navigate to="/dashboard" />
+                        ) : (
+                            <Login />
+                        )
+                    }
+                />
 
-                            <button onClick={logout}>
-                                Logout
-                            </button>
-
+                {/* Dashboard */}
+                <Route
+                    path="/dashboard"
+                    element={
+                        isLoggedIn ? (
                             <Dashboard expenses={expenses} />
+                        ) : (
+                            <Navigate to="/login" />
+                        )
+                    }
+                />
 
-                            <h2>My Expenses</h2>
-
+                {/* Add Expense */}
+                <Route
+                    path="/add-expense"
+                    element={
+                        isLoggedIn ? (
                             <ExpenseForm
                                 amount={amount}
                                 setAmount={setAmount}
@@ -203,28 +255,66 @@ function App() {
                                 addExpense={addExpense}
                                 updateExpense={updateExpense}
                             />
+                        ) : (
+                            <Navigate to="/login" />
+                        )
+                    }
+                />
 
-                            {expenses.length === 0 ? (
-                                <p>No expenses found.</p>
-                            ) : (
-                                <div>
-                                    {expenses.map((expense) => (
+                {/* View Expenses */}
+                <Route
+                    path="/expenses"
+                    element={
+                        isLoggedIn ? (
+                            <div>
+                                {expenses.length === 0 ? (
+                                    <p>No expenses found.</p>
+                                ) : (
+                                    expenses.map((expense) => (
                                         <ExpenseCard
                                             key={expense._id}
                                             expense={expense}
                                             startEdit={startEdit}
                                             deleteExpense={deleteExpense}
                                         />
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <Login />
-                    )
-                }
-            />
-        </Routes>
+                                    ))
+                                )}
+                            </div>
+                        ) : (
+                            <Navigate to="/login" />
+                        )
+                    }
+                />
+
+                {/* Default route */}
+                <Route
+                    path="/"
+                    element={
+                        <Navigate
+                            to={
+                                isLoggedIn
+                                    ? "/dashboard"
+                                    : "/login"
+                            }
+                        />
+                    }
+                />
+
+                {/* Unknown route */}
+                <Route
+                    path="*"
+                    element={
+                        <Navigate
+                            to={
+                                isLoggedIn
+                                    ? "/dashboard"
+                                    : "/login"
+                            }
+                        />
+                    }
+                />
+            </Routes>
+        </>
     );
 }
 

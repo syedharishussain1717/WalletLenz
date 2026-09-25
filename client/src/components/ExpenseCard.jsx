@@ -1,36 +1,30 @@
 function ExpenseCard({ expense, startEdit, deleteExpense }) {
   return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        padding: "15px",
-        marginBottom: "15px",
-        borderRadius: "8px",
-        width: "300px",
-      }}
-    >
-      <h3>{expense.category}</h3>
+    
+    <div className="expense-card">
+      <div className="expense-card-header">
+        <h3 className="expense-card-category">{expense.category}</h3>
+        <p className="expense-card-amount">Rs. {expense.amount}</p>
+      </div>
 
-      <p>
-        <strong>Amount:</strong> Rs. {expense.amount}
-      </p>
+      <p className="expense-card-description">{expense.description}</p>
 
-      <p>
-        <strong>Description:</strong> {expense.description}
-      </p>
-
-      <p>
-        <strong>Date:</strong>{" "}
+      <p className="expense-card-date">
         {new Date(expense.date).toLocaleDateString()}
       </p>
 
-      <button onClick={() => startEdit(expense)}>
-        Edit
-      </button>
+      <div className="expense-card-actions">
+        <button className="btn-edit" onClick={() => startEdit(expense)}>
+          Edit
+        </button>
 
-      <button onClick={() => deleteExpense(expense._id)}>
-        Delete
-      </button>
+        <button
+          className="btn-delete"
+          onClick={() => deleteExpense(expense._id)}
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 }

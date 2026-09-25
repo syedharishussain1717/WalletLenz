@@ -12,62 +12,59 @@ function ExpenseForm({
   updateExpense,
 }) {
   return (
-    <div>
-      <h2>{editingId ? "Edit Expense" : "Add Expense"}</h2>
+    <div className="expense-form-card">
+      <h2 className="expense-form-title">
+        {editingId ? "Edit Expense" : "Add Expense"}
+      </h2>
 
-      <form onSubmit={editingId ? updateExpense : addExpense}>
-        <div>
-          <label>Amount:</label>
+      <form
+        className="expense-form"
+        onSubmit={editingId ? updateExpense : addExpense}
+      >
+        <div className="form-row">
+          <div className="form-group">
+            <label>Amount</label>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="Enter amount"
+            />
+          </div>
 
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
-          />
+          <div className="form-group">
+            <label>Date</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </div>
         </div>
 
-        <br />
+        <div className="form-row">
+          <div className="form-group">
+            <label>Category</label>
+            <input
+              type="text"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder="Enter category"
+            />
+          </div>
 
-        <div>
-          <label>Category:</label>
-
-          <input
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            placeholder="Enter category"
-          />
+          <div className="form-group">
+            <label>Description</label>
+            <input
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter description"
+            />
+          </div>
         </div>
 
-        <br />
-
-        <div>
-          <label>Date:</label>
-
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <label>Description:</label>
-
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Enter description"
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">
+        <button className="expense-form-button" type="submit">
           {editingId ? "Update Expense" : "Add Expense"}
         </button>
       </form>

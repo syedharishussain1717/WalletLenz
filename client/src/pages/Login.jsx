@@ -34,7 +34,7 @@ function Login() {
 
       alert("Login successful!");
 
-      window.location.href = "/";
+      window.location.href = "/dashboard";
 
       console.log("JWT Token:", data.token);
     } catch (error) {
