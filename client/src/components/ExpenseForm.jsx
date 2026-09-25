@@ -95,12 +95,20 @@ function ExpenseForm({
           <div className="form-group">
             <label>Category</label>
 
-            <input
-              type="text"
+            <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              placeholder="Enter category"
-            />
+            >
+              <option value="">Select category</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Bills">Bills</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Education">Education</option>
+              <option value="Health">Health</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
 
           <div className="form-group">
