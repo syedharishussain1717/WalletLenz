@@ -14,6 +14,9 @@
     --primary: #0f766e;
     --primary-dark: #115e59;
 
+    --regiter-btn:rgb(76, 76, 238);
+    --regiter-btn-dark:rgb(10, 10, 235);
+
     --bg: #f1f5f9;
     --card-bg: #ffffff;
 
@@ -50,25 +53,25 @@
    ========================================================= */
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html,
 body,
 #root {
-  width: 100%;
-  margin: 0;
-  padding: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 html,
 body {
-  overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 body {
-  min-width: 0;
-  font-family: Arial, sans-serif;
+    min-width: 0;
+    font-family: Arial, sans-serif;
 }
 
 
@@ -470,6 +473,23 @@ body {
     }
 }
 
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+
+.login-page {
+    min-height: 100vh;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 20px;
+
+    background: var(--bg);
+}
+
 /* Login card */
 
 .login-card {
@@ -640,6 +660,63 @@ body {
     transform: translateY(1px);
 }
 
+/*register button*/
+.register-button {
+    width: 100%;
+
+    padding: 12px;
+
+    margin-top: 4px;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    color: #ffffff;
+
+    background: var(--regiter-btn);
+
+    border: none;
+
+    border-radius: var(--radius-sm);
+
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease;
+}
+
+.register-button:hover {
+    background: var(--regiter-btn-dark);
+}
+
+.register-button:active {
+    transform: translateY(1px);
+}
+
+
+@media (min-width: 768px) {
+    .login-card {
+        padding: 36px 32px;
+    }
+
+    .login-title {
+        font-size: 1.75rem;
+    }
+
+    .login-subtitle {
+        margin-bottom: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-page {
+        padding: 20px 16px;
+    }
+
+    .login-card {
+        padding: 24px 20px;
+    }
+}
+
 
 /* =========================================================
    13. EXPENSE FORM
@@ -647,9 +724,7 @@ body {
 
 .expense-form-card {
     width: calc(100% - 32px);
-
-    max-width: 560px;
-
+    max-width: 1220px;
     margin: 24px auto 40px;
 
     padding: 24px;
@@ -679,10 +754,8 @@ body {
 /* Form rows */
 
 .form-row {
-    display: flex;
-
-    flex-direction: column;
-
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
@@ -727,12 +800,11 @@ body {
 
 .expense-card {
     width: calc(100% - 32px);
-
-    max-width: 700px;
+    max-width: 1220px;
 
     margin: 16px auto;
 
-    padding: 18px;
+    padding: 22px 24px;
 
     background: var(--card-bg);
 
@@ -890,6 +962,27 @@ body {
     transform: translateY(1px);
 }
 
+@media (min-width: 768px) {
+    .expense-card-header {
+        align-items: center;
+    }
+
+    .expense-card-category {
+        font-size: 1.15rem;
+    }
+
+    .expense-card-amount {
+        font-size: 1.15rem;
+    }
+
+    .expense-card-actions {
+        width: 220px;
+    }
+
+    .expense-card-actions button {
+        flex: 1;
+    }
+}
 
 /* =========================================================
    16. TABLET
@@ -917,6 +1010,15 @@ body {
 
 }
 
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .expense-form-card {
+        padding: 20px;
+    }
+}
 
 /* =========================================================
    17. TABLET / DESKTOP NAVBAR
@@ -1148,4 +1250,210 @@ body {
         align-self: flex-start;
     }
 
+}
+
+
+/* =========================================================
+   PHASE 5 - EXPENSE FILTERS & REPORTS
+   ========================================================= */
+
+.expenses-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+}
+
+/* -------------------------
+   FILTERS
+   ------------------------- */
+
+.expense-filters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+    padding: var(--space-lg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.expense-filters>div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.expense-filters label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.expense-filters select,
+.expense-filters input {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: #ffffff;
+    color: var(--text);
+    font-size: 14px;
+}
+
+.expense-filters button {
+    align-self: end;
+    min-height: 40px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--primary);
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.expense-filters button:hover {
+    background: var(--primary-dark);
+}
+
+
+/* -------------------------
+   EXPENSE REPORT
+   ------------------------- */
+
+.expense-report {
+    margin-bottom: var(--space-lg);
+}
+
+.expense-report h3 {
+    margin-bottom: var(--space-md);
+    color: var(--text);
+}
+
+.report-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-md);
+}
+
+.report-card {
+    min-width: 0;
+    padding: var(--space-lg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.report-card h4 {
+    margin: 0 0 var(--space-sm);
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.report-card p {
+    margin: 0;
+    color: var(--primary);
+    font-size: 20px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+/* Tablet */
+@media (max-width: 900px) {
+
+    .expense-filters {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .report-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    .expenses-page {
+        padding: var(--space-md);
+    }
+
+    .expense-filters {
+        grid-template-columns: 1fr;
+        padding: var(--space-md);
+        gap: var(--space-md);
+    }
+
+    .expense-filters button {
+        width: 100%;
+        align-self: stretch;
+    }
+
+    .report-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    .report-card {
+        padding: var(--space-md);
+    }
+
+    .report-card p {
+        font-size: 18px;
+    }
+
+}
+
+/* -------------------------
+   CATEGORY CHART
+   ------------------------- */
+
+.category-chart {
+    width: 100%;
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.category-chart h3 {
+    margin-top: 0;
+    margin-bottom: var(--space-md);
+    color: var(--text);
+}
+
+@media (max-width: 600px) {
+
+    .category-chart {
+        padding: var(--space-md);
+    }
+
+}
+
+
+
+/*Form error validations*/
+.form-error {
+    margin: 0 0 var(--space-md);
+    padding: 10px 12px;
+    background: var(--danger-bg);
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-sm);
+    color: var(--expense);
+    font-size: 14px;
+    font-weight: 500;
 }

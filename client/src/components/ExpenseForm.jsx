@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function ExpenseForm({
   amount,
   setAmount,
@@ -11,6 +13,45 @@ function ExpenseForm({
   addExpense,
   updateExpense,
 }) {
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validate amount
+    if (!amount || Number(amount) <= 0) {
+      setError("Please enter an amount greater than 0.");
+      return;
+    }
+
+    // Validate category
+    if (!category.trim()) {
+      setError("Please enter a category.");
+      return;
+    }
+
+    // Validate date
+    if (!date) {
+      setError("Please select a date.");
+      return;
+    }
+
+    // Validate description
+    if (!description.trim()) {
+      setError("Please enter a description.");
+      return;
+    }
+
+    // Clear error if everything is valid
+    setError("");
+
+    if (editingId) {
+      updateExpense(e);
+    } else {
+      addExpense(e);
+    }
+  };
+
   return (
     <div className="expense-form-card">
       <h2 className="expense-form-title">
@@ -19,11 +60,18 @@ function ExpenseForm({
 
       <form
         className="expense-form"
-        onSubmit={editingId ? updateExpense : addExpense}
+        onSubmit={handleSubmit}
       >
+        {error && (
+          <p className="form-error">
+            {error}
+          </p>
+        )}
+
         <div className="form-row">
           <div className="form-group">
             <label>Amount</label>
+
             <input
               type="number"
               value={amount}
@@ -34,6 +82,7 @@ function ExpenseForm({
 
           <div className="form-group">
             <label>Date</label>
+
             <input
               type="date"
               value={date}
@@ -45,6 +94,7 @@ function ExpenseForm({
         <div className="form-row">
           <div className="form-group">
             <label>Category</label>
+
             <input
               type="text"
               value={category}
@@ -55,6 +105,7 @@ function ExpenseForm({
 
           <div className="form-group">
             <label>Description</label>
+
             <input
               type="text"
               value={description}
@@ -64,7 +115,10 @@ function ExpenseForm({
           </div>
         </div>
 
-        <button className="expense-form-button" type="submit">
+        <button
+          className="expense-form-button"
+          type="submit"
+        >
           {editingId ? "Update Expense" : "Add Expense"}
         </button>
       </form>

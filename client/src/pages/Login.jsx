@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
 
 function Login() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -51,7 +52,21 @@ function Login() {
         <p className="login-subtitle">Log in to manage your expenses.</p>
 
         <form className="login-form" onSubmit={handleLogin}>
+
           <div className="form-group">
+
+            <label htmlFor="name">Name</label>
+            <input
+              id="name"
+              type="text"
+              placeholder="Enter your name"
+              autoComplete="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -77,6 +92,41 @@ function Login() {
             />
           </div>
 
+          <button
+            className="register-button"
+            type="button"
+            onClick={async () => {
+              try {
+                const response = await fetch(
+                  "http://localhost:5000/api/auth/register",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      name,
+                      email,
+                      password,
+                    }),
+                  }
+                );
+
+                const data = await response.json();
+
+                if (response.ok) {
+                  alert(data.message);
+                } else {
+                  alert(data.message);
+                }
+              } catch (error) {
+                console.error("Registration error:", error);
+                alert("Something went wrong. Please try again.");
+              }
+            }}
+          >
+            Register
+          </button>
           <button className="login-button" type="submit">
             Login
           </button>

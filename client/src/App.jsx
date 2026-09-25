@@ -86,11 +86,13 @@ function App() {
             );
 
             const data = await response.json();
-
             if (response.ok) {
                 setExpenses([...expenses, data.expense]);
-
                 clearForm();
+
+                alert("Expense added successfully!");
+
+                navigate("/expenses");
             }
         } catch (error) {
             console.error("Error adding expense:", error);
@@ -172,14 +174,16 @@ function App() {
             if (response.ok) {
                 setExpenses(
                     expenses.map((expense) =>
-                        expense._id === editingId
-                            ? data.expense
-                            : expense
+                        expense._id === editingId ? data.expense : expense
                     )
                 );
 
                 clearForm();
                 setEditingId(null);
+
+                alert("Expense updated successfully!");
+
+                navigate("/expenses");
             }
         } catch (error) {
             console.error("Error updating expense:", error);
