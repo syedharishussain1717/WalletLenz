@@ -7,7 +7,7 @@ import {
     ResponsiveContainer
 } from "recharts";
 
-
+import { useNavigate } from "react-router-dom";
 // Colors for the pie chart slices
 const COLORS = ["#0f766e", "#2563eb", "#f59e0b", "#dc2626", "#7c3aed", "#0891b2", "#65a30d"];
 
@@ -16,6 +16,21 @@ function Dashboard({ expenses }) {
         (total, expense) => total + Number(expense.amount),
         0
     );
+
+
+    const transactionCount = expenses.length;
+
+    const averageExpense =
+        transactionCount > 0
+            ? totalExpenses / transactionCount
+            : 0;
+
+    const highestExpense =
+        transactionCount > 0
+            ? Math.max(
+                ...expenses.map((expense) => Number(expense.amount))
+            )
+            : 0;
 
     const categoryTotals = {};
 
@@ -33,17 +48,56 @@ function Dashboard({ expenses }) {
             value: total
         })
     );
-
+    const navigate = useNavigate();
     return (
+
+
         <div className="dashboard">
             <h2 className="dashboard-title">Dashboard</h2>
 
-            <div className="dashboard-grid">
-                {/* Total Expenses */}
-                <div className="card total-card">
-                    <h3>Total Expenses</h3>
-                    <p className="total-amount">Rs. {totalExpenses}</p>
+            <div className="dashboard-hero">
+                <div>
+                    <p className="dashboard-hero-label">WalletLenz</p>
+
+                    <h1>Welcome back 👋</h1>
+
+                    <p>
+                        Keep track of your spending and stay in control of your finances.
+                    </p>
                 </div>
+
+                <button
+                    className="dashboard-hero-button"
+                    onClick={() => navigate("/add-expense")}
+                >
+                    + Add Expense
+                </button>
+            </div>
+            <div className="dashboard-stats">
+
+                <div className="stat-card">
+                    <p className="stat-label">Total Expenses</p>
+                    <h3>Rs. {totalExpenses.toFixed(2)}</h3>
+                </div>
+
+                <div className="stat-card">
+                    <p className="stat-label">Transactions</p>
+                    <h3>{transactionCount}</h3>
+                </div>
+
+                <div className="stat-card">
+                    <p className="stat-label">Average Expense</p>
+                    <h3>Rs. {averageExpense.toFixed(2)}</h3>
+                </div>
+
+                <div className="stat-card">
+                    <p className="stat-label">Highest Expense</p>
+                    <h3>Rs. {highestExpense.toFixed(2)}</h3>
+                </div>
+
+            </div>
+
+            <div className="dashboard-grid">
 
                 {/* Recent Transactions */}
                 <div className="card">

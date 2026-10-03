@@ -20,10 +20,14 @@ app.use("/api/expenses", expenseRoutes);
 
 app.use("/api/auth", authRoutes);
 
+
+// default backend page
 app.get("/", (req, res) => {
     res.send("WalletLenz Backend is working!");
 });
 
+
+// for testing backend api
 app.get("/api/test", (req, res) => {
     res.json({
         message: "WalletLenz API is working!"
@@ -37,9 +41,7 @@ app.get("/api/protected", authMiddleware, (req, res) => {
     });
 });
 
-mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => {
+mongoose.connect(process.env.MONGO_URI) .then(() => {
         console.log("MongoDB connected successfully");
 
         const PORT = process.env.PORT || 5000;
@@ -47,7 +49,6 @@ mongoose
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
-    })
-    .catch((error) => {
+    }) .catch((error) => {
         console.error("MongoDB connection failed:", error.message);
     });

@@ -92,6 +92,11 @@ function Login() {
             />
           </div>
 
+
+          <button className="login-button" type="submit">
+            Login
+          </button>
+
           <button
             className="register-button"
             type="button"
@@ -126,9 +131,6 @@ function Login() {
             }}
           >
             Register
-          </button>
-          <button className="login-button" type="submit">
-            Login
           </button>
         </form>
       </div>

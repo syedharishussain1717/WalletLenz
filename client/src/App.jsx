@@ -6,7 +6,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
 import ExpenseForm from "./components/ExpenseForm";
-
+import Footer from "./components/Footer";
 
 // Pages
 import Login from "./pages/Login";
@@ -310,6 +310,7 @@ function App() {
                     }
                 />
             </Routes>
+            <Footer/>
         </>
     );
 }

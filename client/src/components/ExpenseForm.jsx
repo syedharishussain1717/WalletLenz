@@ -54,9 +54,20 @@ function ExpenseForm({
 
   return (
     <div className="expense-form-card">
-      <h2 className="expense-form-title">
-        {editingId ? "Edit Expense" : "Add Expense"}
-      </h2>
+      <div className="expense-form-header">
+        <div>
+
+          <h2 className="expense-form-title">
+            {editingId ? "Edit Expense" : "Add Expense"}
+          </h2>
+
+          <p className="expense-form-subtitle">
+            {editingId
+              ? "Update the details of your expense."
+              : "Record your spending and keep your finances organized."}
+          </p>
+        </div>
+      </div>
 
       <form
         className="expense-form"
