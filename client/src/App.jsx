@@ -310,7 +310,8 @@ function App() {
                     }
                 />
             </Routes>
-            <Footer/>
+             {isLoggedIn && <Footer/>}
+            
         </>
     );
 }
